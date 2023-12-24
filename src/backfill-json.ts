@@ -1,5 +1,4 @@
 import { promises as fs } from 'fs';
-import { translate } from '@vitalets/google-translate-api';
 import yargs from 'yargs/yargs';
 import { hideBin } from 'yargs/helpers';
 import { Key, Locale, LocalizedItem, TranslationSet } from './translation-set';
@@ -7,7 +6,7 @@ import { Key, Locale, LocalizedItem, TranslationSet } from './translation-set';
 async function main() {
     const argv = await yargs(hideBin(process.argv))
         .options({
-            'in': {
+            'main': {
                 type: 'string',
                 alias: 'i',
                 describe: 'JSON file to read from',
@@ -24,6 +23,7 @@ async function main() {
             },
             'fallback': {
                 type: 'string',
+                alias: 'f',
                 describe: 'Fallback JSON file to read from',
             },
             'locale': {
@@ -34,7 +34,7 @@ async function main() {
         })
         .array('fallback')
         .array('locale')
-        .demandOption('in')
+        .demandOption('main')
         .demandOption('out')
         .demandOption('locale')
         .argv
@@ -47,9 +47,8 @@ async function main() {
         fallbackTranslations.push(translationSet);
     }
 
-    const sourceJson = JSON.parse(await fs.readFile(argv.in!, 'utf-8'));
-
-    const outTranslations = TranslationSet.fromJSON(sourceJson);
+    const mainJson = JSON.parse(await fs.readFile(argv.main!, 'utf-8'));
+    const outTranslations = TranslationSet.fromJSON(mainJson);
 
     await outTranslations.applyFallbacks(
         argv.locale || ['en'],
@@ -60,20 +59,7 @@ async function main() {
             for (const fallbackSet of fallbackTranslations) {
                 if (!translationInFallbackLocale) continue;
                 const fromFallbackLocale = fallbackSet.fromLocalization(argv.fallbackLocale, translationInFallbackLocale)?.get(locale);
-                if (fromFallbackLocale) {
-                    return fromFallbackLocale;
-                }
-            }
-
-            try {
-                const translationResult = await translate(
-                    translationInFallbackLocale,
-                    { from: argv.fallbackLocale, to: locale },
-                );
-
-                return translationResult?.text;
-            } catch (err) {
-                console.error(err);
+                if (fromFallbackLocale) return fromFallbackLocale;
             }
 
             return null;

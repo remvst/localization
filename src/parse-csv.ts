@@ -1,4 +1,6 @@
 import { promises as fs } from 'fs';
+import yargs from 'yargs/yargs';
+import { hideBin } from 'yargs/helpers';
 import { TranslationSet } from './translation-set';
 
 export async function parseCsv(
@@ -30,3 +32,34 @@ export async function parseCsv(
 
     return res;
 }
+
+async function main() {
+    const argv = await yargs(hideBin(process.argv))
+        .options({
+            'in': {
+                type: 'string',
+                alias: 'i',
+                describe: 'Path to CSV to read from',
+            },
+            'out': {
+                type: 'string',
+                alias: 'o',
+                describe: 'Output file',
+            },
+            'languagesLineIndex': {
+                type: 'number',
+                alias: 'l',
+                describe: 'Index of the row containing the languages',
+            },
+        })
+        .demandOption('in')
+        .demandOption('out')
+        .demandOption('languagesLineIndex')
+        .argv
+
+    const polyglotTranslations = await parseCsv(argv.in!, argv.languagesLineIndex);
+
+    await fs.writeFile(argv.out!, JSON.stringify(polyglotTranslations, null, 4));
+}
+
+main();

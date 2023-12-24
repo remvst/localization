@@ -97,16 +97,22 @@ export class TranslationSet {
     ) {
         for (const [key, localizedItem] of this.translations.entries()) {
             for (const locale of locales) {
-                const translation = localizedItem.get(locale);
+                let translation = localizedItem.get(locale) || null;
                 if (translation) continue;
 
-                const localization = await fallback(key, locale, localizedItem);
-                if (!localization) {
+                try {
+                    translation = await fallback(key, locale, localizedItem);
+                } catch (err) {
+                    console.error(err);
+                    continue;
+                }
+
+                if (!translation) {
                     console.warn(`Unable to find fallback for ${key}`);
                     continue;
                 }
 
-                this.add(key, locale, localization);
+                this.add(key, locale, translation);
             }
         }
     }
