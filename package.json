@@ -1,0 +1,32 @@
+{
+  "name": "@remvst/localization",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/localize.js",
+  "bin": {
+    "localization-parse-polyglot-csv": "./lib/parse-polyglot-csv.js",
+    "localization-backfill": "./lib/backfill.js",
+    "localization-to-typescript": "./lib/to-typescript.js"
+  },
+  "scripts": {
+    "build": "rm -rf lib && tsc",
+    "prepublishOnly": "npm i && npm run build",
+    "parse-polyglot-csv": "ts-node src/parse-polyglot-csv.ts -i polyglot.csv -o testOut/polyglot.json",
+    "test:polyglot": "ts-node src/parse-polyglot-csv.ts -i test/polyglot.csv -o testOut/polyglot.json",
+    "test:backfill": "ts-node src/backfill.ts -i test/localization.json -o testOut/localization-backfilled.json --fallback=testOut/polyglot.json -l en -l fr -l es",
+    "test:to-typescript": "ts-node src/to-typescript.ts -i testOut/localization-backfilled.json -o testOut/localization.ts",
+    "test": "npm run test:polyglot && npm run test:backfill && npm run test:to-typescript"
+  },
+  "author": "Rémi Vansteelandt",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@vitalets/google-translate-api": "^9.2.0",
+    "yargs": "^17.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.5",
+    "@types/yargs": "^17.0.32",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
+  }
+}
