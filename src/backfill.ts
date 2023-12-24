@@ -65,12 +65,16 @@ async function main() {
                 }
             }
 
-            // const translationResult = await translate(
-            //     translationInFallbackLocale,
-            //     { from: argv.fallbackLocale, to: locale },
-            // );
+            try {
+                const translationResult = await translate(
+                    translationInFallbackLocale,
+                    { from: argv.fallbackLocale, to: locale },
+                );
 
-            // return translationResult.text;
+                return translationResult?.text;
+            } catch (err) {
+                console.error(err);
+            }
 
             return null;
         }
