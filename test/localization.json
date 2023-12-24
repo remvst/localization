@@ -5,5 +5,10 @@
     "back": { "en": "Back" },
     "play": { "en": "Play" },
     "time": { "en": "Time" },
-    "backToMainMenu": { "en": "Back To Main Menu", "fr": "Retour au menu principal" }
+    "backToMainMenu": { "en": "Back To Main Menu", "fr": "Retour au menu principal" },
+    "difficulty": { "en": "Difficulty" },
+    "difficultyNormal": { "en": "Normal" },
+    "difficultyHard": { "en": "Hard" },
+    "difficultyEasy": { "en": "Easy" },
+    "difficultyVeryEasy": { "en": "Very Easy" }
 }
