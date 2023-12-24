@@ -26,24 +26,42 @@ Create a JSON file with your localized strings (`my-localization.json`):
 
 Parse the Polyglot CSV file into a JSON file:
 
-```json
-{
-    ...
-    "scripts": {
-        "polyglot": "localization-parse-polyglot-csv -i test/polyglot.csv -o testOut/polyglot.json"
-    },
-    ...
-}
+```sh
+npx @remvst/localize parse-csv \
+    --in=polyglot.csv \
+    --out=polyglot.json \
+    --languages-line-index=1
 ```
 
-Backfill missing translations in your package.json:
+Backfill missing translations using a fallback JSON:
 
-```json
-{
-    ...
-    "scripts": {
-        "backfill": "localization-backfill -i my-localization.json -o testOut/localization-backfilled.json -l en -l fr -l es"
-    },
-    ...
-}
+```sh
+npx @remvst/localize combine-json \
+    --main=localization.json \
+    --fallback=polyglot.json \
+    --out=localization-combined.json \
+    --fallback-locale=en \
+    --locale=en \
+    --locale=fr \
+    --locale=es
+```
+
+Backfill missing translations using Google translate:
+
+```sh
+npx @remvst/localize google-translate \
+    --in=localization-combined.json \
+    --out=localization-full.json \
+    --fallback-locale=en \
+    --locale=en \
+    --locale=fr \
+    --locale=es
+```
+
+Export to Typescript:
+
+```sh
+npx @remvst/localize to-typescript \
+    --in=localization-full.json \
+    --out=localization-full.ts
 ```

@@ -2,19 +2,17 @@
   "name": "@remvst/localization",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/localize.js",
+  "main": "lib/index.js",
   "bin": {
-    "localization-parse-csv": "./lib/parse-csv.js",
-    "localization-backfill-json": "./lib/backfill-json.js",
-    "localization-to-typescript": "./lib/to-typescript.js"
+    "localization": "./lib/index.js"
   },
   "scripts": {
     "build": "rm -rf lib && tsc",
     "prepublishOnly": "npm i && npm run build",
-    "test:polyglot": "ts-node src/parse-csv.ts -i test/polyglot.csv -o testOut/polyglot.json -l 1",
-    "test:backfill-json": "ts-node src/backfill-json.ts --main=test/localization.json --out=testOut/localization-backfilled.json --fallback=testOut/polyglot.json -l en -l fr -l es",
-    "test:backfill-google-translate": "ts-node src/backfill-google-translate.ts --in=testOut/localization-backfilled.json --out=testOut/localization-backfilled-google-translate.json -l en -l fr -l es",
-    "test:to-typescript": "ts-node src/to-typescript.ts -i testOut/localization-backfilled.json -o testOut/localization.ts",
+    "test:polyglot": "ts-node src/index.ts index -i test/polyglot.csv -o testOut/polyglot.json -l 1",
+    "test:backfill-json": "ts-node src/index.ts combine-json --main=test/localization.json --out=testOut/localization-backfilled.json --fallback=testOut/polyglot.json -l en -l fr -l es",
+    "test:backfill-google-translate": "ts-node src/index.ts google-translate --in=testOut/localization-backfilled.json --out=testOut/localization-backfilled-google-translate.json -l en -l fr -l es",
+    "test:to-typescript": "ts-node src/index.ts to-typescript -i testOut/localization-backfilled.json -o testOut/localization.ts",
     "test": "npm run test:polyglot && npm run test:backfill-json && npm run test:to-typescript"
   },
   "author": "Rémi Vansteelandt",
