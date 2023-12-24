@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs';
 import { combineJsonCommand } from './commands/combine-json';
@@ -70,15 +72,15 @@ async function main() {
         })
         .command('to-typescript', 'converts a JSON file into a TypeScript file', async (yargs) => {
             const argv = await yargs
-                .options('out', {
-                    type: 'string',
-                    alias: 'o',
-                    describe: 'Output Typescript file',
-                })
                 .option('in', {
                     type: 'string',
                     alias: 'i',
                     describe: 'JSON file to read from',
+                })
+                .options('out', {
+                    type: 'string',
+                    alias: 'o',
+                    describe: 'Output Typescript file',
                 })
                 .demandOption('in')
                 .demandOption('out')
@@ -87,7 +89,7 @@ async function main() {
             await toTypescriptCommand(argv);
         })
         .command('google-translate', 'adds missing translations to a JSON file using Google translate', async (yargs) => {
-            const argv = await yargs(hideBin(process.argv))
+            const argv = await yargs
                 .option('in', {
                     type: 'string',
                     alias: 'i',

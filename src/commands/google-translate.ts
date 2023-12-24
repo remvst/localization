@@ -17,6 +17,8 @@ export async function googleTranslateCommand(options: {
             const translationInFallbackLocale = item.get(options.fallbackLocale);
             if (!translationInFallbackLocale) return null;
 
+            console.log(`Translating ${JSON.stringify(translationInFallbackLocale)} to ${locale}`);
+
             const translationResult = await translate(
                 translationInFallbackLocale,
                 { from: options.fallbackLocale, to: locale },
