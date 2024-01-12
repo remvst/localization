@@ -65,11 +65,11 @@ export class TranslationSet {
         generatedFileContent += 'export const LOCALIZATION: {[key in LocalizedKey]: LocalizationItem} = {\n';
 
         for (const [key, localizedItem] of this.translations.entries()) {
-            generatedFileContent += `    ${key}: {\n`;
+            generatedFileContent += `    ${JSON.stringify(key)}: {\n`;
 
             for (const [locale, translation] of localizedItem.entries()) {
                 if (!translation) continue;
-                generatedFileContent += `        ${locale}: ${JSON.stringify(translation)},\n`;
+                generatedFileContent += `        ${JSON.stringify(locale)}: ${JSON.stringify(translation)},\n`;
             }
 
             generatedFileContent += `    },\n`;
