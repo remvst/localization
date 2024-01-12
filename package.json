@@ -12,7 +12,7 @@
     "test:polyglot": "ts-node src/index.ts index -i test/polyglot.csv -o testOut/polyglot.json -l 1",
     "test:combine-json": "ts-node src/index.ts combine-json --main=test/localization.json --out=testOut/localization-combined.json --fallback=testOut/polyglot.json -l en -l fr -l es",
     "test:google-translate": "ts-node src/index.ts google-translate --in=testOut/localization-combined.json --out=testOut/localization-backfilled-google-translate.json -l en -l fr -l es",
-    "test:to-typescript": "ts-node src/index.ts to-typescript -i testOut/localization-combined.json -o testOut/localization.ts",
+    "test:to-typescript": "ts-node src/index.ts to-typescript -i testOut/localization-combined.json -o testOut/localization.ts && tsc testOut/localization.ts",
     "test": "npm run test:polyglot && npm run test:combine-json && npm run test:to-typescript"
   },
   "author": "Rémi Vansteelandt",
