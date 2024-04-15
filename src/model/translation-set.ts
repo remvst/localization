@@ -85,6 +85,7 @@ export class TranslationSet {
 
         generatedFileContent += `export function localize(key: LocalizedKey) {\n`;
         generatedFileContent += `    const localizationItem: LocalizationItem = LOCALIZATION[key];\n`;
+        generatedFileContent += `    if (!localizationItem) return key;\n`;
         generatedFileContent += `    return localizationItem[LOCALE] || localizationItem.en;\n`;
         generatedFileContent += `}\n`;
 
