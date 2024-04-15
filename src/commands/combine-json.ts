@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import { TranslationSet, Key, Locale, LocalizedItem } from '../model/translation-set';
+import path from 'path';
 
 export async function combineJsonCommand(options: {
     main: string,
@@ -35,5 +36,6 @@ export async function combineJsonCommand(options: {
         }
     );
 
+    await fs.mkdir(path.dirname(options.out), { recursive: true });
     await fs.writeFile(options.out, JSON.stringify(outTranslations.toJSON(), null, 4));
 }

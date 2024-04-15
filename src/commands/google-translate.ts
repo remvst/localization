@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 import { Key, Locale, LocalizedItem, TranslationSet } from "../model/translation-set";
 import { translate } from '@vitalets/google-translate-api';
+import path from 'path';
 
 export async function googleTranslateCommand(options: {
     in: string,
@@ -28,5 +29,6 @@ export async function googleTranslateCommand(options: {
         }
     );
 
+    await fs.mkdir(path.dirname(options.out), { recursive: true });
     await fs.writeFile(options.out, JSON.stringify(outTranslations.toJSON(), null, 4));
 }
