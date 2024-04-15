@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import { TranslationSet } from "../model/translation-set";
+import path from 'path';
 
 export async function parseCsv(
     path: string,
@@ -37,5 +38,6 @@ export async function parseCsvCommand(options: {
     languagesLineIndex: number,
 }) {
     const polyglotTranslations = await parseCsv(options.in!, options.languagesLineIndex);
+    await fs.mkdir(path.dirname(options.out), { recursive: true });
     await fs.writeFile(options.out!, JSON.stringify(polyglotTranslations, null, 4));
 }
