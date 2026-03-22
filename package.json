@@ -12,7 +12,9 @@
     "test:find-strings": "ts-node src/index.ts find-strings -i test/**/*.js -o testOut/localization-en.json --localize-function-name=i18n",
     "test:localize": "ts-node src/index.ts localize --source-json=testOut/localization-en.json --source-locale=en --destination-locale=fr --destination-json=testOut/localization-fr.json",
     "test:to-typescript": "ts-node src/index.ts to-typescript --default-localization=testOut/localization-en.json --out=testOut/localization.ts --localize-function-name=i18n && tsc testOut/localization.ts",
-    "test": "npm run test:find-strings && npm run test:localize && npm run test:to-typescript"
+    "test": "npm run test:find-strings && npm run test:localize && npm run test:to-typescript && npm run prettier:check",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write ."
   },
   "author": "Rémi Vansteelandt",
   "license": "UNLICENSED",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@types/node": "^18.11.5",
     "@types/yargs": "^17.0.32",
+    "prettier": "3.8.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   }

@@ -14,13 +14,16 @@ Create a JSON file with your localized strings (`my-localization.json`):
 
 ```json
 {
-    "ok": { "en": "Okay" },
-    "confirm": { "en": "Confirm" },
-    "cancel": { "en": "Cancel" },
-    "back": { "en": "Back" },
-    "play": { "en": "Play" },
-    "time": { "en": "Time" },
-    "backToMainMenu": { "en": "Back To Main Menu", "fr": "Retour au menu principal" }
+  "ok": { "en": "Okay" },
+  "confirm": { "en": "Confirm" },
+  "cancel": { "en": "Cancel" },
+  "back": { "en": "Back" },
+  "play": { "en": "Play" },
+  "time": { "en": "Time" },
+  "backToMainMenu": {
+    "en": "Back To Main Menu",
+    "fr": "Retour au menu principal"
+  }
 }
 ```
 
