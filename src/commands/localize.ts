@@ -6,6 +6,7 @@ export async function localize(options: {
   sourceLocale: string;
   destinationJson: string;
   destinationLocale: string;
+  context?: string;
 }) {
   let existingJson: Record<string, string> = {};
   try {

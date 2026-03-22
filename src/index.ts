@@ -53,6 +53,10 @@ async function main() {
           type: "string",
           describe: "Locale to translate to",
         })
+        .option("context", {
+          type: "string",
+          describe: "Context to provide to the translation engine",
+        })
         .demandOption("source-json")
         .demandOption("source-locale")
         .demandOption("destination-json")
