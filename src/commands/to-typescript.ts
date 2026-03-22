@@ -22,7 +22,7 @@ export async function toTypescriptCommand(options: {
   ts += `    LOCALIZATION = localization;\n`;
   ts += `}\n\n`;
 
-  ts += `export function ${options.localizeFunctionName}(key: LocalizedKey) {\n`;
+  ts += `export function ${options.localizeFunctionName}(key: string) {\n`;
   ts += `    return LOCALIZATION[key] || key;\n`;
   ts += `}\n`;
 
