@@ -1,14 +1,27 @@
-import path from "path";
-import { TranslationSet } from "../model/translation-set";
 import { promises as fs } from 'fs';
 
 export async function toTypescriptCommand(options: {
-    in: string,
+    defaultLocalization: string,
     out: string,
+    localizeFunctionName: string,
 }) {
-    const sourceJson = JSON.parse(await fs.readFile(options.in, 'utf-8'));
-    const outTranslations = TranslationSet.fromJSON(sourceJson);
+    const allStringsJson = JSON.parse(await fs.readFile(options.defaultLocalization, 'utf-8'));
 
-    await fs.mkdir(path.dirname(options.out), { recursive: true });
-    await fs.writeFile(options.out, outTranslations.toTypeScript());
+    let ts = '';
+
+    ts += `export type LocalizedKey = ${Object.keys(allStringsJson).map(key => JSON.stringify(key)).join(' | ')};\n\n`;
+    ts += `export type Localization = {[key in LocalizedKey]: string};\n\n`;
+
+    ts += `let LOCALIZATION: Localization = ${JSON.stringify(allStringsJson)};\n\n`;
+
+    ts += `export function setLocalization(localization: Localization) {\n`;
+    ts += `    LOCALIZATION = localization;\n`;
+    ts += `}\n\n`;
+
+    ts += `export function ${options.localizeFunctionName}(key: LocalizedKey) {\n`;
+    ts += `    return LOCALIZATION[key] || key;\n`;
+    ts += `}\n`;
+
+    await fs.writeFile(options.out, ts);
+
 }

@@ -1,123 +1,85 @@
 #!/usr/bin/env node
 
-import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs';
-import { combineJsonCommand } from './commands/combine-json';
-import { googleTranslateCommand } from './commands/google-translate';
-import { parseCsvCommand } from './commands/parse-csv';
+import { hideBin } from 'yargs/helpers';
+import { findStringsCommand } from './commands/find-strings';
+import { localize } from './commands/localize';
 import { toTypescriptCommand } from './commands/to-typescript';
 
 async function main() {
     await yargs(hideBin(process.argv))
-        .command('parse-csv', 'convert a CSV into a JSON', async (yargs) => {
+        .command('find-strings', 'Finds all localizable strings in a source file', async (yargs) => {
             const argv = await yargs
                 .option('in', {
                     type: 'string',
                     alias: 'i',
-                    describe: 'Path to CSV to read from',
+                    describe: 'Folder to read from',
                 })
-                .option('out', {
-                    type: 'string',
-                    alias: 'o',
-                    describe: 'Output file',
-                })
-                .option('languagesLineIndex', {
-                    type: 'number',
-                    alias: 'l',
-                    describe: 'Index of the row containing the languages',
-                })
-                .demandOption('in')
-                .demandOption('out')
-                .demandOption('languagesLineIndex')
-                .argv
-
-            await parseCsvCommand(argv);
-        })
-        .command('combine-json', 'combine multiple JSON files', async (yargs) => {
-            const argv = await yargs
-                .option('main', {
-                    type: 'string',
-                    alias: 'i',
-                    describe: 'JSON file to read from',
-                })
-                .option('out', {
+                .options('out', {
                     type: 'string',
                     alias: 'o',
                     describe: 'Output JSON file',
                 })
-                .option('fallbackLocale', {
+                .options('localize-function-name', {
                     type: 'string',
-                    describe: 'Default locale to backfill translations',
-                    default: 'en',
+                    describe: 'Name of the function used for localization',
                 })
-                .option('fallback', {
-                    type: 'string',
-                    alias: 'f',
-                    describe: 'Fallback JSON file to read from',
-                })
-                .option('locale', {
-                    type: 'string',
-                    alias: 'l',
-                    describe: 'Locale to include',
-                })
-                .array('fallback')
-                .array('locale')
-                .demandOption('main')
+                .demandOption('in')
                 .demandOption('out')
-                .demandOption('locale')
-                .demandOption('fallback')
+                .demandOption('localize-function-name')
                 .argv
 
-            await combineJsonCommand(argv);
+            await findStringsCommand(argv);
         })
-        .command('to-typescript', 'converts a JSON file into a TypeScript file', async (yargs) => {
+        .command('localize', 'Creates a localization JSON file', async (yargs) => {
             const argv = await yargs
-                .option('in', {
+                .option('source-json', {
+                    type: 'string',
+                    describe: 'File that contains all strings in the original language',
+                })
+                .option('source-locale', {
+                    type: 'string',
+                    describe: 'Locale to translate from',
+                })
+                .options('destination-json', {
+                    type: 'string',
+                    alias: 'o',
+                    describe: 'Output JSON file',
+                })
+                .option('destination-locale', {
+                    type: 'string',
+                    describe: 'Locale to translate to',
+                })
+                .demandOption('source-json')
+                .demandOption('source-locale')
+                .demandOption('destination-json')
+                .demandOption('destination-locale')
+                .argv
+
+            await localize(argv);
+        })
+        .command('to-typescript', 'Creates a TypeScript file that can be then imported to localize a project', async (yargs) => {
+            const argv = await yargs
+                .option('default-localization', {
                     type: 'string',
                     alias: 'i',
-                    describe: 'JSON file to read from',
+                    describe: 'Default localization JSON file',
                 })
                 .options('out', {
                     type: 'string',
                     alias: 'o',
                     describe: 'Output Typescript file',
                 })
-                .demandOption('in')
+                .options('localize-function-name', {
+                    type: 'string',
+                    describe: 'Name of the function used for localization',
+                })
+                .demandOption('default-localization')
                 .demandOption('out')
+                .demandOption('localize-function-name')
                 .argv
 
             await toTypescriptCommand(argv);
-        })
-        .command('google-translate', 'adds missing translations to a JSON file using Google translate', async (yargs) => {
-            const argv = await yargs
-                .option('in', {
-                    type: 'string',
-                    alias: 'i',
-                    describe: 'JSON file to read from',
-                })
-                .option('out', {
-                    type: 'string',
-                    alias: 'o',
-                    describe: 'Output JSON file',
-                })
-                .option('fallbackLocale', {
-                    type: 'string',
-                    describe: 'Default locale to backfill translations',
-                    default: 'en',
-                })
-                .option('locale', {
-                    type: 'string',
-                    alias: 'l',
-                    describe: 'Locale to include',
-                })
-                .array('fallback')
-                .array('locale')
-                .demandOption('in')
-                .demandOption('out')
-                .demandOption('locale')
-                .argv
-
-            await googleTranslateCommand(argv);
         })
         .argv;
 }
