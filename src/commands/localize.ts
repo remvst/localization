@@ -7,9 +7,11 @@ export async function localize(options: {
   destinationJson: string;
   destinationLocale: string;
 }) {
-  let outJson: Record<string, string> = {};
+  let originalJson: Record<string, string> = {};
   try {
-    outJson = JSON.parse(await fs.readFile(options.destinationJson, "utf-8"));
+    originalJson = JSON.parse(
+      await fs.readFile(options.destinationJson, "utf-8"),
+    );
   } catch (error) {
     console.error("Error reading or parsing the all-strings file:", error);
   }
@@ -18,9 +20,14 @@ export async function localize(options: {
     await fs.readFile(options.sourceJson, "utf-8"),
   );
 
+  const outJson: Record<string, string> = {};
+
   try {
-    for (const key of Object.keys(allStrings)) {
-      if (outJson[key]) continue;
+    for (const key of Object.keys(allStrings).sort()) {
+      if (originalJson[key]) {
+        outJson[key] = originalJson[key];
+        continue;
+      }
 
       const translationResult = await translate(key, {
         from: options.sourceLocale,

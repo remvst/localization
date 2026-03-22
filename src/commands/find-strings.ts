@@ -8,7 +8,7 @@ export async function findStringsCommand(options: {
 }) {
   const jsfiles = await glob(options.in);
 
-  const outJson: Record<string, string> = {};
+  const strings = new Set<string>();
   for (const file of jsfiles) {
     const content = await fs.readFile(file, "utf-8");
 
@@ -25,8 +25,13 @@ export async function findStringsCommand(options: {
     ];
 
     for (const [_, string] of matches) {
-      outJson[string] = string;
+      strings.add(string);
     }
+  }
+
+  const outJson: Record<string, string> = {};
+  for (const string of Array.from(strings).sort()) {
+    outJson[string] = string;
   }
 
   await fs.writeFile(options.out, JSON.stringify(outJson, null, 4));
