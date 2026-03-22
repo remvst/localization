@@ -19,7 +19,9 @@
   "author": "Rémi Vansteelandt",
   "license": "UNLICENSED",
   "dependencies": {
+    "openai": "^4.30.0",
     "@vitalets/google-translate-api": "^9.2.0",
+    "dotenv": "^16.4.5",
     "glob": "^13.0.6",
     "yargs": "^17.7.2"
   },

@@ -57,6 +57,12 @@ async function main() {
           type: "string",
           describe: "Context to provide to the translation engine",
         })
+        .option("engine", {
+          type: "string",
+          choices: ["gpt", "google"],
+          default: "google",
+          describe: "Translation engine to use",
+        })
         .demandOption("source-json")
         .demandOption("source-locale")
         .demandOption("destination-json")
