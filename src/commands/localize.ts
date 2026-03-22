@@ -2,22 +2,20 @@ import { translate } from "@vitalets/google-translate-api";
 import { promises as fs } from "fs";
 
 export async function localize(options: {
-  "source-json": string;
-  "source-locale": string;
-  "destination-json": string;
-  "destination-locale": string;
+  sourceJson: string;
+  sourceLocale: string;
+  destinationJson: string;
+  destinationLocale: string;
 }) {
   let outJson: Record<string, string> = {};
   try {
-    outJson = JSON.parse(
-      await fs.readFile(options["destination-json"], "utf-8"),
-    );
+    outJson = JSON.parse(await fs.readFile(options.destinationJson, "utf-8"));
   } catch (error) {
     console.error("Error reading or parsing the all-strings file:", error);
   }
 
   const allStrings: Record<string, string> = JSON.parse(
-    await fs.readFile(options["source-json"], "utf-8"),
+    await fs.readFile(options.sourceJson, "utf-8"),
   );
 
   try {
@@ -25,15 +23,15 @@ export async function localize(options: {
       if (outJson[key]) continue;
 
       const translationResult = await translate(key, {
-        from: options["source-locale"],
-        to: options["destination-locale"],
+        from: options.sourceLocale,
+        to: options.destinationLocale,
       });
 
       outJson[key] = translationResult?.text;
     }
   } finally {
     await fs.writeFile(
-      options["destination-json"],
+      options.destinationJson,
       JSON.stringify(outJson, null, 4),
     );
   }
