@@ -72,12 +72,13 @@ export async function localize(options: {
     options.destinationLocale,
   );
 
+  for (const key of Object.keys(allStrings).sort()) {
+    outJson[key] = existingJson[key];
+  }
+
   try {
     for (const key of Object.keys(allStrings).sort()) {
-      if (existingJson[key]) {
-        outJson[key] = existingJson[key];
-        continue;
-      }
+      if (key in outJson) continue;
 
       if (options.engine === "gpt") {
         outJson[key] = await gptTranslate(
