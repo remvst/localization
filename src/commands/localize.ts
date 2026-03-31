@@ -72,7 +72,7 @@ export async function localize(options: {
     options.destinationLocale,
   );
 
-  for (const key of Object.keys(allStrings).sort()) {
+  for (const key of Object.keys(existingJson).sort()) {
     outJson[key] = existingJson[key];
   }
 
