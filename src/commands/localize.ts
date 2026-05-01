@@ -19,6 +19,7 @@ async function gptTranslate(
   from: string,
   to: string,
   context?: string,
+  model: string = "gpt-3.5-turbo",
 ): Promise<string> {
   const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -27,7 +28,7 @@ async function gptTranslate(
     (context ? ` Context: ${context}` : "") +
     `\nText: ${text}`;
   const completion = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo",
+    model,
     messages: [
       {
         role: "system",
@@ -51,6 +52,7 @@ export async function localize(options: {
   destinationLocale: string;
   context?: string;
   engine?: string;
+  gptModel?: string;
 }) {
   let existingJson: Record<string, string> = {};
   try {
@@ -86,6 +88,7 @@ export async function localize(options: {
           options.sourceLocale,
           options.destinationLocale,
           options.context,
+          options.gptModel,
         );
       } else {
         outJson[key] = await googleTranslate(

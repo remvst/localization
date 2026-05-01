@@ -63,6 +63,11 @@ async function main() {
           default: "google",
           describe: "Translation engine to use",
         })
+        .option("gpt-model", {
+          type: "string",
+          default: "gpt-3.5-turbo",
+          describe: "GPT model to use when engine is gpt",
+        })
         .demandOption("source-json")
         .demandOption("source-locale")
         .demandOption("destination-json")
